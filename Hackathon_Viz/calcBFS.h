@@ -45,7 +45,7 @@ bool calcBFS(ULL &s, Vector &path)
 		if (map[cx][cy].f) {
 			map[cx][cy].f = 0;
 			s = d[cx][cy];
-			printf("%d %d total = %llu\n", cx, cy, s);
+			//printf("%d %d total = %llu\n", cx, cy, s);
 			printPath(cx, cy, path);
 			sx = cx, sy = cy;
 			return true;
@@ -83,15 +83,15 @@ inline void getInt(T &x) {
 	sign && (x = -x);
 }
 
-void readData(const char * filename) {
+void readData(const char * infile, const char* outfile) {
 	
-	freopen(filename, "r", stdin);
-	freopen("./data/out_0.txt", "w", stdout);
+	freopen(infile, "r", stdin);
+	freopen(outfile, "w", stdout);
 	getInt(n); getInt(m);
 	getInt(sx); getInt(sy);
 	getInt(k);
 	
-	printf("%d %d\n", n, m);
+	//printf("%d %d\n", n, m);
 	for (int i = 0; i < k; ++i) {
 		int u, v;
 		getInt(u); getInt(v);
@@ -114,16 +114,16 @@ void readData(const char * filename) {
 }
 
 template<class T, class Vector>
-bool getPath(const char * filename, T &total, Vector & path)
+bool getPath(const char * infile, const char* outfile, T &total, Vector & path)
 {
 	clock_t t = clock();
-	readData(filename);
+	readData(infile, outfile);
 	int tx = sx, ty = sy;
 	
 	for (int i = 0; i < k; ++i) {
 		calcBFS(total, path);
 	}
-	puts("ok");
+	//puts("ok");
 	map[tx][ty].f = 1;
 	calcBFS(total, path);
 	
@@ -135,8 +135,8 @@ bool getPath(const char * filename, T &total, Vector & path)
 	last.push_back({ sx, sy });
 	path.emplace_back(last);
 
-	std::cout << "total time used: ";
-	std::cout << (double)(clock() - t) / CLOCKS_PER_SEC << " seconds." << std::endl;
+	//std::cout << "total time used: ";
+	//std::cout << (double)(clock() - t) / CLOCKS_PER_SEC << " seconds." << std::endl;
 	return true;
 }
 

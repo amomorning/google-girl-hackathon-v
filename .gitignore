@@ -260,3 +260,5 @@ paket-files/
 __pycache__/
 *.pyc
 /Hackathon_Viz/data/team5_input_1.txt
+*.txt
+*.zip
