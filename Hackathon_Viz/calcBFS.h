@@ -1,6 +1,5 @@
 #pragma once
 #include <bits/stdc++.h>
-
 typedef unsigned long long ULL;
 typedef std::pair<ULL, std::pair<int, int> > P;
 
@@ -18,13 +17,23 @@ std::pair<int, int> pre[N][N];
 std::pair<int, int> tmpk[66];
 
 template<class Vector>
-bool printPath(Vector &path) {
-
+bool printPath(const int x, const int y, Vector &path) {
+	std::vector<std::pair<int, int> > subPath;
+	int tx = x, ty = y;
+	while (tx != sx || ty != sy) {
+		std::pair<int, int> tmp = pre[tx][ty];
+		tx = tmp.first;
+		ty = tmp.second;
+		subPath.emplace_back(tmp);
+	}
+	path.emplace_back(subPath);
 }
 
-bool calcBFS(ULL &s) {
+template<class Vector>
+bool calcBFS(ULL &s, Vector &path)
+{
 	std::priority_queue<P, std::vector<P>, std::greater<P> > q;
-	memset(d, 0x3f, sizeof(d));
+	for (int i = 0; i <= n; ++i) for (int j = 0; j <= m; ++j) d[i][j] = 1e15;
 	d[sx][sy] = s;
 	q.push({ s, {sx, sy} });
 
@@ -35,6 +44,9 @@ bool calcBFS(ULL &s) {
 
 		if (map[cx][cy].f) {
 			map[cx][cy].f = 0;
+			s = d[cx][cy];
+			printf("%d %d total = %llu\n", cx, cy, s);
+			printPath(cx, cy, path);
 			sx = cx, sy = cy;
 			return true;
 		}
@@ -62,28 +74,71 @@ bool calcBFS(ULL &s) {
 	return false;
 }
 
-template<class T, class Vector>
-bool getPath(const char * filename, T total, Vector & path)
-{
-	std::ifstream is(filename, std::ios::binary);
-	if(is) readData(is);
-	else return false;
-	int tx = sx, ty = sy;
+
+template<class T>
+inline void getInt(T &x) {
+	char c; bool sign = false;
+	for (c = getchar(); c < '0' || c > '9'; c = getchar()) if (c == '-') sign = true;
+	for (x = 0; c >= '0' && c <= '9'; c = getchar()) x = x * 10 + c - '0';
+	sign && (x = -x);
+}
+
+void readData(const char * filename) {
 	
-	total = 0;
+	freopen(filename, "r", stdin);
+	freopen("./data/out_0.txt", "w", stdout);
+	getInt(n); getInt(m);
+	getInt(sx); getInt(sy);
+	getInt(k);
+	
+	printf("%d %d\n", n, m);
 	for (int i = 0; i < k; ++i) {
-		calcBFS(total);
-		printPath(path);
+		int u, v;
+		getInt(u); getInt(v);
+		tmpk[i] = { u, v };
+	}
+
+	for (int i = 0; i < n*m; ++i) {
+		int u, v, g, r, t;
+		getInt(u); getInt(v);
+		getInt(g); getInt(r); getInt(t);
+		map[u][v] = { g, r, t, 0 };
+	}
+
+	for (int i = 0; i < k; ++i) {
+		int u = tmpk[i].first;
+		int v = tmpk[i].second;
+		map[u][v].f = 1;
 	}
 	
-	map[tx][ty].f = 1;
-	if (!calcBFS(total)) return false;
-	if (!printPath(path)) return false;
+}
 
+template<class T, class Vector>
+bool getPath(const char * filename, T &total, Vector & path)
+{
+	clock_t t = clock();
+	readData(filename);
+	int tx = sx, ty = sy;
+	
+	for (int i = 0; i < k; ++i) {
+		calcBFS(total, path);
+	}
+	puts("ok");
+	map[tx][ty].f = 1;
+	calcBFS(total, path);
+	
+	tx = pre[sx][sy].first;
+	ty = pre[sx][sy].second;
+	total = d[tx][ty] + 30;
+
+	std::vector<std::pair<int, int> > last;
+	last.push_back({ sx, sy });
+	path.emplace_back(last);
+
+	std::cout << "total time used: ";
+	std::cout << (double)(clock() - t) / CLOCKS_PER_SEC << " seconds." << std::endl;
 	return true;
 }
 
-template<class IS>
-void readData(IS &in) {
-}
+
 
