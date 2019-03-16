@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 #include "calcBFS.h"
 #include "util.h"
-typedef unsigned long long ULL;
+typedef long long ULL;
 
 constexpr auto WIDTH = 900;
 constexpr auto HEIGHT = 900;
@@ -45,7 +45,7 @@ void draw() {
 */
 
 int main() {
-	for (int i = 0; i <= 64; ++i) {
+	for (int i = 0; i <= 65; ++i) {
 		std::vector<std::vector<std::pair<int, int> > > path;
 		ULL ans = 0;
 		std::string infile = "./data/inputs_sat/input_" + std::to_string(i);
@@ -54,7 +54,7 @@ int main() {
 		outfile += ".txt";
 		getPath(infile.c_str(), outfile.c_str(), ans, path);
 
-		printf("%llu\n", ans);
+		printf("%lld\n", ans);
 		for (auto tmp : path) {
 			std::reverse(tmp.begin(), tmp.end());
 			for (auto p : tmp) {

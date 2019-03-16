@@ -1,6 +1,6 @@
 #pragma once
 #include <bits/stdc++.h>
-typedef unsigned long long ULL;
+typedef long long ULL;
 typedef std::pair<ULL, std::pair<int, int> > P;
 
 const int N = 3e3 + 10;
