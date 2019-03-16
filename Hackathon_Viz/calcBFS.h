@@ -10,14 +10,19 @@ struct Node {
 	int g, r, t, f;
 }map[N][N];
 
-int n, m;
+int n, m, k;
 int sx, sy;
 ULL d[N][N];
 
 std::pair<int, int> pre[N][N];
 std::pair<int, int> tmpk[66];
 
-ULL calcBFS(ULL s) {
+template<class Vector>
+bool printPath(Vector &path) {
+
+}
+
+bool calcBFS(ULL &s) {
 	std::priority_queue<P, std::vector<P>, std::greater<P> > q;
 	memset(d, 0x3f, sizeof(d));
 	d[sx][sy] = s;
@@ -31,7 +36,7 @@ ULL calcBFS(ULL s) {
 		if (map[cx][cy].f) {
 			map[cx][cy].f = 0;
 			sx = cx, sy = cy;
-			return d[cx][cy];
+			return true;
 		}
 
 		for (int dx = -1; dx <= 1; ++dx) {
@@ -48,22 +53,34 @@ ULL calcBFS(ULL s) {
 
 				if (d[nx][ny] <= d[cx][cy] + tmp + 30) continue;
 
+				pre[nx][ny] = { cx, cy };
 				d[nx][ny] = d[cx][cy] + tmp + 30;
 				q.push({ d[nx][ny], {nx, ny} });
 			}
 		}
 	}
+	return false;
 }
 
-template<class Vector>
-bool getPath(const char * filename, Vector & path)
+template<class T, class Vector>
+bool getPath(const char * filename, T total, Vector & path)
 {
 	std::ifstream is(filename, std::ios::binary);
 	if(is) readData(is);
 	else return false;
+	int tx = sx, ty = sy;
 	
-		
+	total = 0;
+	for (int i = 0; i < k; ++i) {
+		calcBFS(total);
+		printPath(path);
+	}
+	
+	map[tx][ty].f = 1;
+	if (!calcBFS(total)) return false;
+	if (!printPath(path)) return false;
 
+	return true;
 }
 
 template<class IS>
