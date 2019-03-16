@@ -57,7 +57,7 @@ bool calcBFS(ULL &s, Vector &path)
 				int ny = cy + dy;
 				if (nx < 1 || ny < 1 || nx > n || ny > m) continue;
 				Node v = map[nx][ny];
-				
+
 				ULL tmp = (d[cx][cy] + 30) % (v.g + v.r);
 				tmp = v.g - tmp;
 				if (tmp >= v.t) tmp = v.t;
@@ -84,13 +84,13 @@ inline void getInt(T &x) {
 }
 
 void readData(const char * infile, const char* outfile) {
-	
+
 	freopen(infile, "r", stdin);
 	freopen(outfile, "w", stdout);
 	getInt(n); getInt(m);
 	getInt(sx); getInt(sy);
 	getInt(k);
-	
+
 	//printf("%d %d\n", n, m);
 	for (int i = 0; i < k; ++i) {
 		int u, v;
@@ -110,7 +110,40 @@ void readData(const char * infile, const char* outfile) {
 		int v = tmpk[i].second;
 		map[u][v].f = 1;
 	}
-	
+
+}
+
+template<class T, class Vector>
+void checkReverse(T &total, Vector & path) {
+	std::vector<std::pair<int, int> > res;
+
+	for (auto tmp : path) {
+		std::reverse(tmp.begin(), tmp.end());
+		for (auto p : tmp) {
+			res.push_back(p);
+		}
+	}
+	res.push_back({sx, sy});
+	ULL ret = 30;
+	for (int i = res.size() - 2; i > 0; --i) {
+		int x = res[i].first, y = res[i].second;
+		Node u = map[x][y];
+		ULL tmp = ret % (u.g + u.r);
+		tmp = u.g - tmp;
+		if (tmp >= u.t) ret += u.t;
+		else ret += tmp + u.r + u.t;
+
+		ret += 30;
+	}
+	if (ret < total) {
+		total = ret;
+		std::reverse(res.begin(), res.end());
+	}
+
+	printf("%lld\n", total);
+	for (int i = 0; i < res.size(); ++i) {
+		printf("%d %d\n", res[i].first, res[i].second);
+	}
 }
 
 template<class T, class Vector>
@@ -119,22 +152,19 @@ bool getPath(const char * infile, const char* outfile, T &total, Vector & path)
 	clock_t t = clock();
 	readData(infile, outfile);
 	int tx = sx, ty = sy;
-	
+
 	for (int i = 0; i < k; ++i) {
 		calcBFS(total, path);
 	}
 	//puts("ok");
 	map[tx][ty].f = 1;
 	calcBFS(total, path);
-	
+
 	tx = pre[sx][sy].first;
 	ty = pre[sx][sy].second;
 	total = d[tx][ty] + 30;
 
-	std::vector<std::pair<int, int> > last;
-	last.push_back({ sx, sy });
-	path.emplace_back(last);
-
+	checkReverse(total, path);
 	//std::cout << "total time used: ";
 	//std::cout << (double)(clock() - t) / CLOCKS_PER_SEC << " seconds." << std::endl;
 	return true;
