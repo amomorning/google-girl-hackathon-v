@@ -76,10 +76,10 @@ void draw(int n) {
 
 	sf::Color co = sf::Color::Blue;
 	for (int i = 1; i < path.size(); ++i) {
-		if (i < 15) co = sf::Color::Blue;
+		if (i < 16) co = sf::Color::Blue;
 		else if (i < 27) co = sf::Color::Red;
 		else if (i < 38) co = sf::Color::Yellow;
-		else if (i < 56) co = sf::Color::Blue;
+		else if (i < 57) co = sf::Color::Blue;
 		else if (i < 67) co = sf::Color::Green;
 		else co = sf::Color::Red;
 
@@ -186,7 +186,7 @@ void initDraw() {
 
 
 void run() {
-	for (int i = 1; i <= 10; ++i) {
+	for (int i = 86; i <= 101; ++i) {
 		std::vector<std::vector<std::pair<int, int> > > path;
 		ULL ans = 0;
 		std::string infile = "./data/input_sun/input_" + std::to_string(i);
@@ -198,7 +198,7 @@ void run() {
 }
 
 int main() {
-	run();
+	//run();
 
-	//initDraw(); 
+	initDraw(); 
 }
