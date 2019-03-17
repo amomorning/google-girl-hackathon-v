@@ -2,17 +2,20 @@
 #include <SFML/Graphics.hpp>
 #include "calcBFS.h"
 #include "util.h"
-typedef long long ULL;
 
 constexpr auto WIDTH = 900;
 constexpr auto HEIGHT = 900;
 
-template<class Point, class Vector>
-void draw(Point pt, Vector path) {
+
+std::vector<std::pair<int, int> > pt;
+std::vector<std::pair<int, int> > path;
+
+void draw(int n) {
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 16;
 	sf::Font font;
 	font.loadFromFile("./fonts/arial.ttf");
+
 
 	sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Hackathon_Viz", sf::Style::Default, settings);;
 
@@ -20,13 +23,16 @@ void draw(Point pt, Vector path) {
 	std::vector<sf::CircleShape> point;
 	std::vector<sf::RectangleShape> route;
 
-	for (int i = 1; i < 900; i += 100) {
-		sf::RectangleShape l(sf::Vector2f(900, 3));
-		l.setPosition(0, i);
+	std::vector<sf::CircleShape> curP;
+
+	int space = 600 / n;
+	for (int i = space; i < 900; i += space) {
+		sf::RectangleShape l(sf::Vector2f(900-space, 3));
+		l.setPosition(space, i);
 		l.setFillColor(sf::Color::White);
 
-		sf::RectangleShape r(sf::Vector2f(3, 900));
-		r.setPosition(i, 0);
+		sf::RectangleShape r(sf::Vector2f(3, 900-space));
+		r.setPosition(i, space);
 		r.setFillColor(sf::Color::White);
 
 		line.push_back(l);
@@ -34,34 +40,37 @@ void draw(Point pt, Vector path) {
 	}
 
 	for (auto p : pt) {
-		int y = p.first;
-		int x = p.second;
+		int y = p.first+1;
+		int x = p.second+1;
 		sf::CircleShape c(10);
-		c.setPosition(100 * x - 10, 100 * y - 10);
+		c.setPosition(space * x - 10, space * y - 10);
 		c.setFillColor(sf::Color::Red);
 		point.push_back(c);
 	}
-	for (auto tmp : path) {
-		std::reverse(tmp.begin(), tmp.end());
-		for (int i = 1; i < tmp.size(); ++i) {
-			int sy = tmp[i - 1].first;
-			int sx = tmp[i - 1].second;
-			int ty = tmp[i].first;
-			int tx = tmp[i].second;
+	for (int i = 1; i < path.size(); ++i) {
+		int sy = path[i - 1].first+1;
+		int sx = path[i - 1].second+1;
+		int ty = path[i].first+1;
+		int tx = path[i].second+1;
 
-			if (sx == tx) {
-				sf::RectangleShape l(sf::Vector2f(4, 100));
-				l.setPosition(100 * sx, 100 * std::min(sy, ty));
-				l.setFillColor(sf::Color::Blue);
-				route.push_back(l);
-			}
-			if (sy == ty) {
-				sf::RectangleShape l(sf::Vector2f(100, 4));
-				l.setPosition(100 * std::min(sx, tx), 100 * sy);
-				l.setFillColor(sf::Color::Cyan);
-				route.push_back(l);
-			}
+		if (sx == tx) {
+			sf::RectangleShape l(sf::Vector2f(6, space));
+			l.setPosition(space * sx, space * std::min(sy, ty));
+			l.setFillColor(sf::Color::Blue);
+			route.push_back(l);
+
 		}
+		if (sy == ty) {
+			sf::RectangleShape l(sf::Vector2f(space, 6));
+			l.setPosition(space * std::min(sx, tx), space * sy);
+			l.setFillColor(sf::Color::Blue);
+			route.push_back(l);
+		}
+
+		sf::CircleShape c(8);
+		c.setPosition(space*tx-8, space*ty-8);
+		c.setFillColor(sf::Color::Yellow);
+		curP.push_back(c);
 	}
 
 	int k = 0;
@@ -72,8 +81,10 @@ void draw(Point pt, Vector path) {
 		while (window.pollEvent(event))
 		{
 			if (event.type == sf::Event::KeyPressed) {
-				if (event.key.code == sf::Keyboard::N)
+				if (event.key.code == sf::Keyboard::N) {
 					k++;
+					k = std::min(k, (int)curP.size());
+				}
 				if (event.key.code == sf::Keyboard::R)
 					k = 0;
 			}
@@ -91,46 +102,64 @@ void draw(Point pt, Vector path) {
 		for (int i = 0; i < point.size(); ++i) {
 			window.draw(point[i]);
 		}
+		window.draw(curP[k]);
 		window.display();
 	}
 }
 
 
-std::vector<std::pair<int, int> > res;
+void readF(const char * infile, const char* outfile, int &max) {
+
+	int n, m, sx, sy, k;
+	freopen(infile, "r", stdin);
+	scanf("%d%d%d%d%d", &n, &m, &sx, &sy, &k);
+	max = std::max(n, m);
+	pt.push_back({ sx, sy });
+
+	//printf("%d %d\n", n, m);
+	for (int i = 0; i < k; ++i) {
+		int u, v; scanf("%d%d", &u, &v);
+		pt.push_back({ u, v });
+	}
+
+	for (int i = 0; i < n*m; ++i) {
+		int u, v, g, r, t;
+		scanf("%d%d%d%d%d", &u, &v, &g, &r, &t);
+		map[u][v] = { g, r, t, 0 };
+	}
+
+	freopen(outfile, "r", stdin);
+
+	long long ans;
+	scanf("%lld", &ans);
+	int u, v;
+	while (~scanf("%d%d", &u, &v)) {
+		path.push_back({ u, v });
+	}
+}
+
 
 void initDraw() {
-	/*
-	std::vector<std::vector<std::pair<int, int> > > path;
-	ULL ans = 0;
+
 	std::string infile = "./data/inputs_sat/input_" + std::to_string(1);
 	infile += ".txt";
 	std::string outfile = "./data/output_sat/output_" + std::to_string(1);
 	outfile += ".txt";
 
-	std::vector<std::pair<int, int> > pt;
-	freopen(infile.c_str(), "r", stdin);
-	int n, m, sx, sy, k;
-	scanf("%d%d%d%d%d", &n, &m, &sx, &sy, &k);
-	pt.push_back({ sx, sy });
-	for (int i = 0; i < k; ++i) {
-		int u, v;
-		scanf("%d%d", &u, &v);
-		pt.push_back({ u, v });
-	}
+	int n;
+	readF(infile.c_str(), outfile.c_str(), n);
+	draw(n);
 
-	getPath(infile.c_str(), outfile.c_str(), ans, path);
-	draw(pt, path);
-*/
 }
 
 
 void run() {
-	for (int i = 0; i <= 64; ++i) {
+	for (int i = 1; i <= 10; ++i) {
 		std::vector<std::vector<std::pair<int, int> > > path;
 		ULL ans = 0;
-		std::string infile = "./data/inputs_sat/input_" + std::to_string(i);
+		std::string infile = "./data/input_sun/input_" + std::to_string(i);
 		infile += ".txt";
-		std::string outfile = "./data/output_sat/output_" + std::to_string(i);
+		std::string outfile = "./data/output_sun/output_" + std::to_string(i);
 		outfile += ".txt";
 		getPath(infile.c_str(), outfile.c_str(), ans, path);
 	}
@@ -138,4 +167,6 @@ void run() {
 
 int main() {
 	run();
+
+	//initDraw();
 }
