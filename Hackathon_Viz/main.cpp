@@ -74,23 +74,31 @@ void draw(int n) {
 	c.setFillColor(sf::Color::Yellow);
 	curP.push_back(c);
 
+	sf::Color co = sf::Color::Blue;
 	for (int i = 1; i < path.size(); ++i) {
+		if (i < 15) co = sf::Color::Blue;
+		else if (i < 27) co = sf::Color::Red;
+		else if (i < 38) co = sf::Color::Yellow;
+		else if (i < 56) co = sf::Color::Blue;
+		else if (i < 67) co = sf::Color::Green;
+		else co = sf::Color::Red;
+
 		int sy = path[i - 1].first + 1;
 		int sx = path[i - 1].second + 1;
 		int ty = path[i].first + 1;
 		int tx = path[i].second + 1;
 
 		if (sx == tx) {
-			sf::RectangleShape l(sf::Vector2f(6, space));
+			sf::RectangleShape l(sf::Vector2f(10, space));
 			l.setPosition(space * sx, space * std::min(sy, ty));
-			l.setFillColor(sf::Color::Blue);
+			l.setFillColor(co);
 			route.push_back(l);
 
 		}
 		if (sy == ty) {
-			sf::RectangleShape l(sf::Vector2f(space, 6));
+			sf::RectangleShape l(sf::Vector2f(space, 10));
 			l.setPosition(space * std::min(sx, tx), space * sy);
-			l.setFillColor(sf::Color::Blue);
+			l.setFillColor(co);
 			route.push_back(l);
 		}
 
