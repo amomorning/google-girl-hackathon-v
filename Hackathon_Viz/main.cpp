@@ -150,11 +150,6 @@ void readF(const char * infile, const char* outfile, int &max) {
 		pt.push_back({ u, v });
 	}
 
-	for (int i = 0; i < n*m; ++i) {
-		int u, v, g, r, t;
-		scanf("%d%d%d%d%d", &u, &v, &g, &r, &t);
-		map[u][v] = { g, r, t, 0 };
-	}
 
 	freopen(outfile, "r", stdin);
 
@@ -169,7 +164,7 @@ void readF(const char * infile, const char* outfile, int &max) {
 
 void initDraw() {
 
-	int cnt = 18;
+	int cnt = 101;
 	std::string infile = "./data/inputs_sat/input_" + std::to_string(cnt);
 	infile += ".txt";
 	std::string outfile = "./data/output_sat/output_" + std::to_string(cnt);
@@ -195,7 +190,7 @@ void run() {
 }
 
 int main() {
-	//run();
+	run();
 
-	initDraw();
+	//initDraw(); 
 }
