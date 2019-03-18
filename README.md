@@ -1,6 +1,8 @@
 ## Google Girl Hackathon Season V
 Project Repo of team 5 - 一个队
 
+Video https://youtu.be/6VNBzXzKsDQ
+
 ### Awards
 - Battle Winner ( best performance and efficiency )
 - Best Team - TOP 1
