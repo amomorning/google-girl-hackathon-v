@@ -13,7 +13,7 @@ Project Repo of team 5 - 一个队
 - Yang Xueyao, East China Normal University 
 
 ### Required
-- [SFML](https://sfml-dev.org) - For Visualization Algorithm Result
+- [SFML](https://sfml-dev.org) - For Visualizating Algorithm Result
 
 ### Acknowledgement
-Thanks to nowcoder.com for giving the opportunities to Google Girl Hackathon, and interesting problem from [Kuangbin](https://kuangbin.github.io/)
+Thanks to [nowcoder.com](nowcoder.com) for giving the opportunities to Google Girl Hackathon, and interesting problem from [Kuangbin](https://kuangbin.github.io/)
