@@ -7,7 +7,7 @@ Video https://youtu.be/6VNBzXzKsDQ
 - Battle Winner ( best performance and efficiency )
 - Best Team - TOP 1
 
-### Team Info
+### Developers
 - Du Anna, Southwest Minzu University
 - Yang Yuting, Southwest Minzu University
 - Mo Yichen, Zhejiang Sci-Tech University
@@ -15,7 +15,9 @@ Video https://youtu.be/6VNBzXzKsDQ
 - Yang Xueyao, East China Normal University 
 
 ### Required
-- [SFML](https://sfml-dev.org) - For Visualizating Algorithm Result
+- [SFML](https://sfml-dev.org) - For Algorithm Result Visualization
 
 ### Acknowledgement
-Thanks to [nowcoder.com](nowcoder.com) for giving the opportunities to Google Girl Hackathon, and interesting problem from [Kuangbin](https://kuangbin.github.io/)
+**THANKS GOOGLE!!!**
+
+Thanks to [nowcoder.com](nowcoder.com) for giving the opportunities to Google Girl Hackathon, and interesting problem from [Kuangbin](https://kuangbin.github.io/).
